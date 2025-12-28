@@ -1,36 +1,114 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# ForgeGuard
 
-## Getting Started
+ForgeGuard is a small Next.js app for performing deterministic backend audits and safety checks for InsForge backends. It analyzes backend metadata (tables, auth rules, functions) and produces a readiness report with findings and a score.
 
-First, run the development server:
+This repository contains the frontend UI (Next.js + React) and a few server routes that accept metadata (either fetched from an InsForge instance or pasted JSON) and run deterministic checks implemented in `src/lib/checks.ts`.
+
+## Features
+
+- Connect to an InsForge backend and fetch metadata for analysis
+- Paste or upload metadata JSON manually
+- Deterministic checks for schema, auth, and deploy best-practices
+- Save and view generated reports
+
+## Quick start (development)
+
+Prerequisites: Node 18+ (or compatible), npm/yarn/pnpm.
+
+Install dependencies:
+
+```bash
+cd /path/to/ForgeGuard-main
+npm install
+```
+
+Run the dev server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open your browser to http://localhost:3000.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+If you're using a different package manager, replace the npm commands accordingly.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## How to use the app
 
-## Learn More
+- On the homepage, choose between "Connect InsForge" (fetch metadata from a running InsForge instance) or "Paste JSON" (manually paste metadata).
+- Fill the required fields (project label, InsForge URL + API key, or metadata JSON) and click "Run Audit".
+- The app will redirect to the generated report page on success.
 
-To learn more about Next.js, take a look at the following resources:
+## Important developer notes
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- The deterministic checks live in `src/lib/checks.ts`. They expect a `BackendMetadata` shape defined in `src/lib/types.ts`.
+- A recent runtime crash was caused by `checkDeploy` calling `.some()` on `metadata.authRules` when `authRules` was undefined. That is now guarded with `Array.isArray(metadata.authRules) && ...` to avoid a TypeError. If you see `Cannot read properties of undefined (reading 'some')` in logs, ensure the code is up-to-date and that the incoming metadata is valid.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Troubleshooting
 
-## Deploy on Vercel
+- Stale compiled files / dev server lock:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+  If you edit server-side files and your UI becomes unresponsive (buttons not clickable, tabs not switching), the dev server may be running an old build or a second dev instance may have left a lock file. Common symptom:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+  ```
+  ⨯ Unable to acquire lock at .next/dev/lock, is another instance of next dev running?
+  ```
+
+  If that happens:
+
+  1. Check for running `next`/dev processes:
+
+  ```bash
+  ps aux | grep -i next | grep -v grep
+  ```
+
+  2. If a stale process is running, stop it (use `kill <pid>`). If you can't find a process but `.next/dev/lock` exists, remove the lock file:
+
+  ```bash
+  rm -f .next/dev/lock
+  ```
+
+  3. Restart the dev server:
+
+  ```bash
+  npm run dev
+  ```
+
+  Note: Always try to stop an existing `next dev` instance gracefully first. Removing the lock file while a real dev server is running can cause build issues.
+
+- Unclickable UI
+
+  - Ensure your browser console doesn't show runtime JS errors. A runtime exception during hydration can cause UI controls to become unresponsive.
+  - Restart the Next dev server to ensure compiled code reflects the latest edits.
+
+## Testing & validation
+
+- TypeScript typecheck:
+
+```bash
+npx tsc --noEmit
+```
+
+- Linting (if available in repo):
+
+```bash
+# npm run lint
+```
+
+## Files of interest
+
+- `src/app/page.tsx` — main UI for creating audits
+- `src/lib/checks.ts` — deterministic checks (schema, auth, deploy)
+- `src/lib/types.ts` — metadata and finding types
+- `src/app/api/analyze/route.ts` — API route that accepts metadata and runs checks
+
+## Contributing
+
+1. Fork the repo and create a feature branch
+2. Run and test locally
+3. Open a PR with a clear description and tests where applicable
+
+## License
+
+This project does not include a license file in the repo root. Add a `LICENSE` file if you intend to open-source under a specific license.
+
+---

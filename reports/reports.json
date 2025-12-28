@@ -404,6 +404,333 @@
       },
       "slug": "m7dk1j",
       "createdAt": "2025-12-28T10:41:21.456Z"
+    },
+    "luz9so": {
+      "projectLabel": "abc",
+      "sourceMode": "insforge",
+      "readinessScore": 100,
+      "summary": {
+        "high": 0,
+        "medium": 0,
+        "low": 0
+      },
+      "findings": [],
+      "slug": "luz9so",
+      "createdAt": "2025-12-28T10:51:05.405Z"
+    },
+    "nlbmwj": {
+      "projectLabel": "Health app",
+      "sourceMode": "manual",
+      "readinessScore": 100,
+      "summary": {
+        "high": 0,
+        "medium": 0,
+        "low": 0
+      },
+      "findings": [],
+      "rawMetadata": {
+        "tables": [
+          {
+            "name": "users",
+            "columns": [
+              {
+                "name": "id",
+                "type": "uuid",
+                "nullable": false,
+                "primaryKey": true
+              },
+              {
+                "name": "email",
+                "type": "varchar",
+                "nullable": false
+              },
+              {
+                "name": "created_at",
+                "type": "timestamp",
+                "nullable": false
+              }
+            ]
+          },
+          {
+            "name": "profiles",
+            "columns": [
+              {
+                "name": "id",
+                "type": "uuid",
+                "nullable": false,
+                "primaryKey": true
+              },
+              {
+                "name": "user_id",
+                "type": "uuid",
+                "nullable": false,
+                "foreignKey": {
+                  "table": "users",
+                  "column": "id"
+                }
+              },
+              {
+                "name": "bio",
+                "type": "text",
+                "nullable": true
+              }
+            ]
+          },
+          {
+            "name": "posts",
+            "columns": [
+              {
+                "name": "id",
+                "type": "uuid",
+                "nullable": false,
+                "primaryKey": true
+              },
+              {
+                "name": "author_id",
+                "type": "uuid",
+                "nullable": false,
+                "foreignKey": {
+                  "table": "users",
+                  "column": "id"
+                }
+              },
+              {
+                "name": "title",
+                "type": "varchar",
+                "nullable": false
+              },
+              {
+                "name": "content",
+                "type": "text",
+                "nullable": false
+              }
+            ]
+          }
+        ],
+        "authRules": [
+          {
+            "endpoint": "/api/users",
+            "method": "GET",
+            "requiresAuth": false,
+            "rolesAllowed": []
+          },
+          {
+            "endpoint": "/api/users",
+            "method": "POST",
+            "requiresAuth": true,
+            "rolesAllowed": [
+              "admin"
+            ]
+          },
+          {
+            "endpoint": "/api/posts",
+            "method": "GET",
+            "requiresAuth": false,
+            "rolesAllowed": []
+          },
+          {
+            "endpoint": "/api/posts",
+            "method": "POST",
+            "requiresAuth": true,
+            "rolesAllowed": [
+              "user",
+              "admin"
+            ]
+          }
+        ],
+        "functions": [
+          {
+            "name": "createProfile",
+            "trigger": "http",
+            "touchesTables": [
+              "profiles"
+            ],
+            "isDestructive": false
+          },
+          {
+            "name": "archiveOldPosts",
+            "trigger": "scheduled",
+            "touchesTables": [
+              "posts"
+            ],
+            "isDestructive": false
+          }
+        ]
+      },
+      "slug": "nlbmwj",
+      "createdAt": "2025-12-28T10:54:56.145Z"
+    },
+    "l0w13w": {
+      "projectLabel": "Fitness",
+      "sourceMode": "manual",
+      "readinessScore": 0,
+      "summary": {
+        "high": 5,
+        "medium": 2,
+        "low": 0
+      },
+      "findings": [
+        {
+          "id": "1766919322935-7eb8fuzty",
+          "severity": "HIGH",
+          "category": "SCHEMA",
+          "title": "Table \"accounts\" has no primary key",
+          "evidence": "Table accounts has 2 columns but no primary key defined.",
+          "recommendation": "Add a primary key column (e.g., \"id\" with integer type and primaryKey: true) to table \"accounts\"."
+        },
+        {
+          "id": "1766919322935-5xb5o6voi",
+          "severity": "HIGH",
+          "category": "SCHEMA",
+          "title": "Column \"account_id\" in table \"accounts\" lacks foreign key",
+          "evidence": "Column \"account_id\" in table \"accounts\" ends with \"_id\" but has no foreignKey relationship defined.",
+          "recommendation": "Add a foreignKey relationship to column \"account_id\" pointing to the referenced table and column."
+        },
+        {
+          "id": "1766919322935-sam13oqwc",
+          "severity": "HIGH",
+          "category": "SCHEMA",
+          "title": "Column \"account_id\" in table \"transactions\" lacks foreign key",
+          "evidence": "Column \"account_id\" in table \"transactions\" ends with \"_id\" but has no foreignKey relationship defined.",
+          "recommendation": "Add a foreignKey relationship to column \"account_id\" pointing to the referenced table and column."
+        },
+        {
+          "id": "1766919322935-6tm6sffnc",
+          "severity": "HIGH",
+          "category": "SCHEMA",
+          "title": "Column \"account_id\" in table \"sessions\" lacks foreign key",
+          "evidence": "Column \"account_id\" in table \"sessions\" ends with \"_id\" but has no foreignKey relationship defined.",
+          "recommendation": "Add a foreignKey relationship to column \"account_id\" pointing to the referenced table and column."
+        },
+        {
+          "id": "1766919322935-o0njcr4gy",
+          "severity": "HIGH",
+          "category": "AUTH",
+          "title": "Write endpoint \"POST /api/transactions\" has no authentication",
+          "evidence": "Endpoint POST /api/transactions allows write operations without authentication (requiresAuth: false).",
+          "recommendation": "Set requiresAuth: true for endpoint POST /api/transactions to prevent unauthorized data modification."
+        },
+        {
+          "id": "1766919322935-4bbzcw9pv",
+          "severity": "MEDIUM",
+          "category": "AUTH",
+          "title": "DELETE endpoint \"/api/sessions\" allows \"user\" role",
+          "evidence": "Endpoint DELETE /api/sessions allows users with \"user\" role to delete resources. This may be overly permissive.",
+          "recommendation": "Consider restricting DELETE operations on \"/api/sessions\" to \"admin\" role only."
+        },
+        {
+          "id": "1766919322935-7mv29yf91",
+          "severity": "MEDIUM",
+          "category": "DEPLOY",
+          "title": "Destructive function \"settleAccounts\" lacks admin protection",
+          "evidence": "Function \"settleAccounts\" has isDestructive: true but no auth rules mention \"admin\" role.",
+          "recommendation": "Add auth rules that require \"admin\" role before executing destructive function \"settleAccounts\"."
+        }
+      ],
+      "rawMetadata": {
+        "tables": [
+          {
+            "name": "accounts",
+            "columns": [
+              {
+                "name": "account_id",
+                "type": "uuid",
+                "nullable": false
+              },
+              {
+                "name": "owner_email",
+                "type": "varchar",
+                "nullable": true
+              }
+            ]
+          },
+          {
+            "name": "transactions",
+            "columns": [
+              {
+                "name": "id",
+                "type": "uuid",
+                "nullable": false,
+                "primaryKey": true
+              },
+              {
+                "name": "account_id",
+                "type": "uuid",
+                "nullable": false
+              },
+              {
+                "name": "amount",
+                "type": "decimal",
+                "nullable": false
+              }
+            ]
+          },
+          {
+            "name": "sessions",
+            "columns": [
+              {
+                "name": "id",
+                "type": "uuid",
+                "nullable": false,
+                "primaryKey": true
+              },
+              {
+                "name": "account_id",
+                "type": "uuid",
+                "nullable": true
+              },
+              {
+                "name": "expires_at",
+                "type": "timestamp",
+                "nullable": false
+              }
+            ]
+          }
+        ],
+        "authRules": [
+          {
+            "endpoint": "/api/accounts",
+            "method": "GET",
+            "requiresAuth": false,
+            "rolesAllowed": []
+          },
+          {
+            "endpoint": "/api/transactions",
+            "method": "POST",
+            "requiresAuth": false,
+            "rolesAllowed": []
+          },
+          {
+            "endpoint": "/api/sessions",
+            "method": "DELETE",
+            "requiresAuth": true,
+            "rolesAllowed": [
+              "user"
+            ]
+          }
+        ],
+        "functions": [
+          {
+            "name": "settleAccounts",
+            "trigger": "http",
+            "touchesTables": [
+              "accounts",
+              "transactions"
+            ],
+            "isDestructive": true
+          },
+          {
+            "name": "cleanupSessions",
+            "trigger": "scheduled",
+            "touchesTables": [
+              "sessions"
+            ],
+            "isDestructive": false
+          }
+        ]
+      },
+      "slug": "l0w13w",
+      "createdAt": "2025-12-28T10:55:22.935Z"
     }
   }
 }
