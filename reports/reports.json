@@ -731,6 +731,601 @@
       },
       "slug": "l0w13w",
       "createdAt": "2025-12-28T10:55:22.935Z"
+    },
+    "qrvicp": {
+      "projectLabel": "abc",
+      "sourceMode": "insforge",
+      "readinessScore": 100,
+      "summary": {
+        "high": 0,
+        "medium": 0,
+        "low": 0
+      },
+      "findings": [],
+      "slug": "qrvicp",
+      "createdAt": "2025-12-28T11:10:46.747Z"
+    },
+    "ten6we": {
+      "projectLabel": "dd",
+      "sourceMode": "manual",
+      "readinessScore": 20,
+      "summary": {
+        "high": 5,
+        "medium": 2,
+        "low": 0
+      },
+      "findings": [
+        {
+          "id": "1766920280231-f07kwpaux",
+          "severity": "HIGH",
+          "category": "SCHEMA",
+          "title": "Table \"items\" has no primary key",
+          "evidence": "Table items has 2 columns but no primary key defined.",
+          "recommendation": "Add a primary key column (e.g., \"id\" with integer type and primaryKey: true) to table \"items\"."
+        },
+        {
+          "id": "1766920280231-brwqfakfl",
+          "severity": "HIGH",
+          "category": "SCHEMA",
+          "title": "Table \"orders\" has no primary key",
+          "evidence": "Table orders has 2 columns but no primary key defined.",
+          "recommendation": "Add a primary key column (e.g., \"id\" with integer type and primaryKey: true) to table \"orders\"."
+        },
+        {
+          "id": "1766920280231-6vni7ixnq",
+          "severity": "HIGH",
+          "category": "SCHEMA",
+          "title": "Column \"item_id\" in table \"orders\" lacks foreign key",
+          "evidence": "Column \"item_id\" in table \"orders\" ends with \"_id\" but has no foreignKey relationship defined.",
+          "recommendation": "Add a foreignKey relationship to column \"item_id\" pointing to the referenced table and column."
+        },
+        {
+          "id": "1766920280231-zv5ku8ozq",
+          "severity": "HIGH",
+          "category": "AUTH",
+          "title": "Write endpoint \"POST /orders/create\" has no authentication",
+          "evidence": "Endpoint POST /orders/create allows write operations without authentication (requiresAuth: false).",
+          "recommendation": "Set requiresAuth: true for endpoint POST /orders/create to prevent unauthorized data modification."
+        },
+        {
+          "id": "1766920280231-l0pd60xlo",
+          "severity": "HIGH",
+          "category": "AUTH",
+          "title": "Write endpoint \"DELETE /orders/delete\" has no authentication",
+          "evidence": "Endpoint DELETE /orders/delete allows write operations without authentication (requiresAuth: false).",
+          "recommendation": "Set requiresAuth: true for endpoint DELETE /orders/delete to prevent unauthorized data modification."
+        },
+        {
+          "id": "1766920280231-y38dll95q",
+          "severity": "MEDIUM",
+          "category": "DEPLOY",
+          "title": "Destructive function \"deleteEverything\" lacks admin protection",
+          "evidence": "Function \"deleteEverything\" has isDestructive: true but no auth rules mention \"admin\" role.",
+          "recommendation": "Add auth rules that require \"admin\" role before executing destructive function \"deleteEverything\"."
+        },
+        {
+          "id": "1766920280231-rb43rvzvv",
+          "severity": "MEDIUM",
+          "category": "DEPLOY",
+          "title": "Destructive function \"resetInventory\" lacks admin protection",
+          "evidence": "Function \"resetInventory\" has isDestructive: true but no auth rules mention \"admin\" role.",
+          "recommendation": "Add auth rules that require \"admin\" role before executing destructive function \"resetInventory\"."
+        }
+      ],
+      "rawMetadata": {
+        "tables": [
+          {
+            "name": "items",
+            "columns": [
+              {
+                "name": "id",
+                "type": "uuid",
+                "nullable": true
+              },
+              {
+                "name": "name",
+                "type": "text",
+                "nullable": true
+              }
+            ]
+          },
+          {
+            "name": "orders",
+            "columns": [
+              {
+                "name": "id",
+                "type": "uuid",
+                "nullable": false
+              },
+              {
+                "name": "item_id",
+                "type": "uuid",
+                "nullable": false
+              }
+            ]
+          }
+        ],
+        "authRules": [
+          {
+            "endpoint": "/orders/create",
+            "method": "POST",
+            "requiresAuth": false,
+            "rolesAllowed": []
+          },
+          {
+            "endpoint": "/orders/delete",
+            "method": "DELETE",
+            "requiresAuth": false,
+            "rolesAllowed": []
+          }
+        ],
+        "functions": [
+          {
+            "name": "deleteEverything",
+            "trigger": "http",
+            "touchesTables": [
+              "items",
+              "orders"
+            ],
+            "isDestructive": true
+          },
+          {
+            "name": "resetInventory",
+            "trigger": "scheduled",
+            "touchesTables": [
+              "items"
+            ],
+            "isDestructive": true
+          }
+        ]
+      },
+      "slug": "ten6we",
+      "createdAt": "2025-12-28T11:11:20.232Z"
+    },
+    "4xe9dc": {
+      "projectLabel": "Fitness",
+      "sourceMode": "manual",
+      "readinessScore": 20,
+      "summary": {
+        "high": 5,
+        "medium": 2,
+        "low": 0
+      },
+      "findings": [
+        {
+          "id": "1766920319866-hxx1wo1kb",
+          "severity": "HIGH",
+          "category": "SCHEMA",
+          "title": "Table \"accounts\" has no primary key",
+          "evidence": "Table accounts has 2 columns but no primary key defined.",
+          "recommendation": "Add a primary key column (e.g., \"id\" with integer type and primaryKey: true) to table \"accounts\"."
+        },
+        {
+          "id": "1766920319866-cl43xncax",
+          "severity": "HIGH",
+          "category": "SCHEMA",
+          "title": "Column \"account_id\" in table \"accounts\" lacks foreign key",
+          "evidence": "Column \"account_id\" in table \"accounts\" ends with \"_id\" but has no foreignKey relationship defined.",
+          "recommendation": "Add a foreignKey relationship to column \"account_id\" pointing to the referenced table and column."
+        },
+        {
+          "id": "1766920319866-syzpyaop0",
+          "severity": "HIGH",
+          "category": "SCHEMA",
+          "title": "Column \"account_id\" in table \"transactions\" lacks foreign key",
+          "evidence": "Column \"account_id\" in table \"transactions\" ends with \"_id\" but has no foreignKey relationship defined.",
+          "recommendation": "Add a foreignKey relationship to column \"account_id\" pointing to the referenced table and column."
+        },
+        {
+          "id": "1766920319866-7tkap0kzs",
+          "severity": "HIGH",
+          "category": "SCHEMA",
+          "title": "Column \"account_id\" in table \"sessions\" lacks foreign key",
+          "evidence": "Column \"account_id\" in table \"sessions\" ends with \"_id\" but has no foreignKey relationship defined.",
+          "recommendation": "Add a foreignKey relationship to column \"account_id\" pointing to the referenced table and column."
+        },
+        {
+          "id": "1766920319866-pjwqx16v7",
+          "severity": "HIGH",
+          "category": "AUTH",
+          "title": "Write endpoint \"POST /api/transactions\" has no authentication",
+          "evidence": "Endpoint POST /api/transactions allows write operations without authentication (requiresAuth: false).",
+          "recommendation": "Set requiresAuth: true for endpoint POST /api/transactions to prevent unauthorized data modification."
+        },
+        {
+          "id": "1766920319867-bmsbwytib",
+          "severity": "MEDIUM",
+          "category": "AUTH",
+          "title": "DELETE endpoint \"/api/sessions\" allows \"user\" role",
+          "evidence": "Endpoint DELETE /api/sessions allows users with \"user\" role to delete resources. This may be overly permissive.",
+          "recommendation": "Consider restricting DELETE operations on \"/api/sessions\" to \"admin\" role only."
+        },
+        {
+          "id": "1766920319867-v50no446m",
+          "severity": "MEDIUM",
+          "category": "DEPLOY",
+          "title": "Destructive function \"settleAccounts\" lacks admin protection",
+          "evidence": "Function \"settleAccounts\" has isDestructive: true but no auth rules mention \"admin\" role.",
+          "recommendation": "Add auth rules that require \"admin\" role before executing destructive function \"settleAccounts\"."
+        }
+      ],
+      "rawMetadata": {
+        "tables": [
+          {
+            "name": "accounts",
+            "columns": [
+              {
+                "name": "account_id",
+                "type": "uuid",
+                "nullable": false
+              },
+              {
+                "name": "owner_email",
+                "type": "varchar",
+                "nullable": true
+              }
+            ]
+          },
+          {
+            "name": "transactions",
+            "columns": [
+              {
+                "name": "id",
+                "type": "uuid",
+                "nullable": false,
+                "primaryKey": true
+              },
+              {
+                "name": "account_id",
+                "type": "uuid",
+                "nullable": false
+              },
+              {
+                "name": "amount",
+                "type": "decimal",
+                "nullable": false
+              }
+            ]
+          },
+          {
+            "name": "sessions",
+            "columns": [
+              {
+                "name": "id",
+                "type": "uuid",
+                "nullable": false,
+                "primaryKey": true
+              },
+              {
+                "name": "account_id",
+                "type": "uuid",
+                "nullable": true
+              },
+              {
+                "name": "expires_at",
+                "type": "timestamp",
+                "nullable": false
+              }
+            ]
+          }
+        ],
+        "authRules": [
+          {
+            "endpoint": "/api/accounts",
+            "method": "GET",
+            "requiresAuth": false,
+            "rolesAllowed": []
+          },
+          {
+            "endpoint": "/api/transactions",
+            "method": "POST",
+            "requiresAuth": false,
+            "rolesAllowed": []
+          },
+          {
+            "endpoint": "/api/sessions",
+            "method": "DELETE",
+            "requiresAuth": true,
+            "rolesAllowed": [
+              "user"
+            ]
+          }
+        ],
+        "functions": [
+          {
+            "name": "settleAccounts",
+            "trigger": "http",
+            "touchesTables": [
+              "accounts",
+              "transactions"
+            ],
+            "isDestructive": true
+          },
+          {
+            "name": "cleanupSessions",
+            "trigger": "scheduled",
+            "touchesTables": [
+              "sessions"
+            ],
+            "isDestructive": false
+          }
+        ]
+      },
+      "slug": "4xe9dc",
+      "createdAt": "2025-12-28T11:11:59.867Z"
+    },
+    "kvis9f": {
+      "projectLabel": "Fitness",
+      "sourceMode": "manual",
+      "readinessScore": 100,
+      "summary": {
+        "high": 0,
+        "medium": 0,
+        "low": 0
+      },
+      "findings": [],
+      "rawMetadata": {
+        "tables": [
+          {
+            "name": "users",
+            "columns": [
+              {
+                "name": "id",
+                "type": "uuid",
+                "nullable": false,
+                "primaryKey": true
+              },
+              {
+                "name": "email",
+                "type": "varchar",
+                "nullable": false
+              },
+              {
+                "name": "created_at",
+                "type": "timestamp",
+                "nullable": false
+              }
+            ]
+          },
+          {
+            "name": "profiles",
+            "columns": [
+              {
+                "name": "id",
+                "type": "uuid",
+                "nullable": false,
+                "primaryKey": true
+              },
+              {
+                "name": "user_id",
+                "type": "uuid",
+                "nullable": false,
+                "foreignKey": {
+                  "table": "users",
+                  "column": "id"
+                }
+              },
+              {
+                "name": "bio",
+                "type": "text",
+                "nullable": true
+              }
+            ]
+          },
+          {
+            "name": "posts",
+            "columns": [
+              {
+                "name": "id",
+                "type": "uuid",
+                "nullable": false,
+                "primaryKey": true
+              },
+              {
+                "name": "author_id",
+                "type": "uuid",
+                "nullable": false,
+                "foreignKey": {
+                  "table": "users",
+                  "column": "id"
+                }
+              },
+              {
+                "name": "title",
+                "type": "varchar",
+                "nullable": false
+              },
+              {
+                "name": "content",
+                "type": "text",
+                "nullable": false
+              }
+            ]
+          }
+        ],
+        "authRules": [
+          {
+            "endpoint": "/api/users",
+            "method": "GET",
+            "requiresAuth": false,
+            "rolesAllowed": []
+          },
+          {
+            "endpoint": "/api/users",
+            "method": "POST",
+            "requiresAuth": true,
+            "rolesAllowed": [
+              "admin"
+            ]
+          },
+          {
+            "endpoint": "/api/posts",
+            "method": "GET",
+            "requiresAuth": false,
+            "rolesAllowed": []
+          },
+          {
+            "endpoint": "/api/posts",
+            "method": "POST",
+            "requiresAuth": true,
+            "rolesAllowed": [
+              "user",
+              "admin"
+            ]
+          }
+        ],
+        "functions": [
+          {
+            "name": "createProfile",
+            "trigger": "http",
+            "touchesTables": [
+              "profiles"
+            ],
+            "isDestructive": false
+          },
+          {
+            "name": "archiveOldPosts",
+            "trigger": "scheduled",
+            "touchesTables": [
+              "posts"
+            ],
+            "isDestructive": false
+          }
+        ]
+      },
+      "slug": "kvis9f",
+      "createdAt": "2025-12-28T11:12:34.185Z"
+    },
+    "z7zntf": {
+      "projectLabel": "Fitness",
+      "sourceMode": "manual",
+      "readinessScore": 80,
+      "summary": {
+        "high": 1,
+        "medium": 0,
+        "low": 0
+      },
+      "findings": [
+        {
+          "id": "1766920425138-2np58m7so",
+          "severity": "HIGH",
+          "category": "SCHEMA",
+          "title": "Column \"user_id\" in table \"sessions\" lacks foreign key",
+          "evidence": "Column \"user_id\" in table \"sessions\" ends with \"_id\" but has no foreignKey relationship defined.",
+          "recommendation": "Add a foreignKey relationship to column \"user_id\" pointing to the referenced table and column."
+        }
+      ],
+      "rawMetadata": {
+        "tables": [
+          {
+            "name": "users",
+            "columns": [
+              {
+                "name": "id",
+                "type": "uuid",
+                "nullable": false,
+                "primaryKey": true
+              },
+              {
+                "name": "email",
+                "type": "varchar",
+                "nullable": false
+              },
+              {
+                "name": "created_at",
+                "type": "timestamp",
+                "nullable": false
+              }
+            ]
+          },
+          {
+            "name": "sessions",
+            "columns": [
+              {
+                "name": "id",
+                "type": "uuid",
+                "nullable": false,
+                "primaryKey": true
+              },
+              {
+                "name": "user_id",
+                "type": "uuid",
+                "nullable": false
+              },
+              {
+                "name": "expires_at",
+                "type": "timestamp",
+                "nullable": false
+              }
+            ]
+          },
+          {
+            "name": "logs",
+            "columns": [
+              {
+                "name": "id",
+                "type": "uuid",
+                "nullable": false,
+                "primaryKey": true
+              },
+              {
+                "name": "message",
+                "type": "text",
+                "nullable": true
+              },
+              {
+                "name": "created_at",
+                "type": "timestamp",
+                "nullable": false
+              }
+            ]
+          }
+        ],
+        "authRules": [
+          {
+            "endpoint": "/api/users",
+            "method": "GET",
+            "requiresAuth": false,
+            "rolesAllowed": []
+          },
+          {
+            "endpoint": "/api/sessions",
+            "method": "POST",
+            "requiresAuth": true,
+            "rolesAllowed": [
+              "user"
+            ]
+          },
+          {
+            "endpoint": "/api/logs",
+            "method": "GET",
+            "requiresAuth": true,
+            "rolesAllowed": [
+              "admin"
+            ]
+          }
+        ],
+        "functions": [
+          {
+            "name": "cleanupSessions",
+            "trigger": "scheduled",
+            "touchesTables": [
+              "sessions"
+            ],
+            "isDestructive": false
+          },
+          {
+            "name": "writeLog",
+            "trigger": "http",
+            "touchesTables": [
+              "logs"
+            ],
+            "isDestructive": false
+          }
+        ]
+      },
+      "slug": "z7zntf",
+      "createdAt": "2025-12-28T11:13:45.139Z"
     }
   }
 }

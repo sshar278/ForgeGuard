@@ -24,23 +24,29 @@ export function runChecks(metadata: BackendMetadata): { findings: Finding[]; sco
     findings.push(...checkDeploy(metadata))
   }
 
-  // Calculate score: start at 100, deduct points for findings
-  let score = 100
+  // Calculate score: start at 100 and compute a weighted deduction based on findings.
+  // Use a capped deduction to avoid scores collapsing to 0 for large numbers of findings
+  // (keeps scores more informative). We keep the original weights but cap the
+  // maximum deduction to 80 points.
+  let rawDeduction = 0
   findings.forEach(finding => {
     switch (finding.severity) {
       case "HIGH":
-        score -= 20
+        rawDeduction += 20
         break
       case "MEDIUM":
-        score -= 10
+        rawDeduction += 10
         break
       case "LOW":
-        score -= 5
+        rawDeduction += 5
         break
     }
   })
 
-  // Clamp score between 0 and 100
+  const maxDeduction = 80 // don't deduct more than 80 points
+  const deduction = Math.min(rawDeduction, maxDeduction)
+  let score = 100 - deduction
+  // Clamp final score between 0 and 100 just in case
   score = Math.max(0, Math.min(100, score))
 
   // Calculate summary
