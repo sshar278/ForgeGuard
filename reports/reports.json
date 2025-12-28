@@ -1,0 +1,409 @@
+{
+  "reports": {
+    "8han49": {
+      "projectLabel": "ABC",
+      "sourceMode": "manual",
+      "readinessScore": 0,
+      "summary": {
+        "high": 5,
+        "medium": 4,
+        "low": 0
+      },
+      "findings": [
+        {
+          "id": "1766917849985-kzym3qgxi",
+          "severity": "MEDIUM",
+          "category": "SCHEMA",
+          "title": "Column \"email\" in table \"users\" is nullable",
+          "evidence": "Column \"email\" in table \"users\" has nullable: true. This may cause data integrity issues.",
+          "recommendation": "Set nullable: false for column \"email\" in table \"users\" to ensure data integrity."
+        },
+        {
+          "id": "1766917849985-pnbaucap6",
+          "severity": "HIGH",
+          "category": "SCHEMA",
+          "title": "Table \"posts\" has no primary key",
+          "evidence": "Table posts has 3 columns but no primary key defined.",
+          "recommendation": "Add a primary key column (e.g., \"id\" with integer type and primaryKey: true) to table \"posts\"."
+        },
+        {
+          "id": "1766917849985-m7pt48w1h",
+          "severity": "MEDIUM",
+          "category": "SCHEMA",
+          "title": "Column \"title\" in table \"posts\" is nullable",
+          "evidence": "Column \"title\" in table \"posts\" has nullable: true. This may cause data integrity issues.",
+          "recommendation": "Set nullable: false for column \"title\" in table \"posts\" to ensure data integrity."
+        },
+        {
+          "id": "1766917849985-b020eljeq",
+          "severity": "HIGH",
+          "category": "SCHEMA",
+          "title": "Column \"user_id\" in table \"posts\" lacks foreign key",
+          "evidence": "Column \"user_id\" in table \"posts\" ends with \"_id\" but has no foreignKey relationship defined.",
+          "recommendation": "Add a foreignKey relationship to column \"user_id\" pointing to the referenced table and column."
+        },
+        {
+          "id": "1766917849985-7orvy5dhs",
+          "severity": "HIGH",
+          "category": "SCHEMA",
+          "title": "Foreign key in \"comments.post_id\" points to non-existent table",
+          "evidence": "Column \"post_id\" references table \"post\" which does not exist in the schema.",
+          "recommendation": "Either create the missing table \"post\" or fix the foreignKey reference."
+        },
+        {
+          "id": "1766917849986-58om2slzc",
+          "severity": "HIGH",
+          "category": "AUTH",
+          "title": "Write endpoint \"POST /users\" has no authentication",
+          "evidence": "Endpoint POST /users allows write operations without authentication (requiresAuth: false).",
+          "recommendation": "Set requiresAuth: true for endpoint POST /users to prevent unauthorized data modification."
+        },
+        {
+          "id": "1766917849986-wrvmuwbfi",
+          "severity": "HIGH",
+          "category": "AUTH",
+          "title": "Endpoint \"GET /users\" requires auth but has no allowed roles",
+          "evidence": "Endpoint GET /users has requiresAuth: true but rolesAllowed is empty. No users can access this endpoint.",
+          "recommendation": "Add appropriate roles to rolesAllowed (e.g., [\"user\", \"admin\"]) for endpoint GET /users."
+        },
+        {
+          "id": "1766917849986-tbsg3mwbn",
+          "severity": "MEDIUM",
+          "category": "AUTH",
+          "title": "DELETE endpoint \"/users\" allows \"user\" role",
+          "evidence": "Endpoint DELETE /users allows users with \"user\" role to delete resources. This may be overly permissive.",
+          "recommendation": "Consider restricting DELETE operations on \"/users\" to \"admin\" role only."
+        },
+        {
+          "id": "1766917849986-1ypnlqdd5",
+          "severity": "MEDIUM",
+          "category": "DEPLOY",
+          "title": "Destructive function \"cleanup_old_data\" lacks admin protection",
+          "evidence": "Function \"cleanup_old_data\" has isDestructive: true but no auth rules mention \"admin\" role.",
+          "recommendation": "Add auth rules that require \"admin\" role before executing destructive function \"cleanup_old_data\"."
+        }
+      ],
+      "rawMetadata": {
+        "tables": [
+          {
+            "name": "users",
+            "columns": [
+              {
+                "name": "id",
+                "type": "integer",
+                "primaryKey": true
+              },
+              {
+                "name": "email",
+                "type": "text",
+                "nullable": true
+              },
+              {
+                "name": "name",
+                "type": "text",
+                "nullable": true
+              }
+            ]
+          },
+          {
+            "name": "posts",
+            "columns": [
+              {
+                "name": "id",
+                "type": "integer"
+              },
+              {
+                "name": "title",
+                "type": "text",
+                "nullable": true
+              },
+              {
+                "name": "user_id",
+                "type": "integer"
+              }
+            ]
+          },
+          {
+            "name": "comments",
+            "columns": [
+              {
+                "name": "id",
+                "type": "integer",
+                "primaryKey": true
+              },
+              {
+                "name": "content",
+                "type": "text"
+              },
+              {
+                "name": "post_id",
+                "type": "integer",
+                "foreignKey": {
+                  "table": "post",
+                  "column": "id"
+                }
+              }
+            ]
+          }
+        ],
+        "authRules": [
+          {
+            "endpoint": "/users",
+            "method": "POST",
+            "requiresAuth": false,
+            "rolesAllowed": []
+          },
+          {
+            "endpoint": "/users",
+            "method": "GET",
+            "requiresAuth": true,
+            "rolesAllowed": []
+          },
+          {
+            "endpoint": "/users",
+            "method": "DELETE",
+            "requiresAuth": true,
+            "rolesAllowed": [
+              "user"
+            ]
+          },
+          {
+            "endpoint": "/posts",
+            "method": "GET",
+            "requiresAuth": false,
+            "rolesAllowed": []
+          },
+          {
+            "endpoint": "/posts",
+            "method": "POST",
+            "requiresAuth": true,
+            "rolesAllowed": [
+              "user"
+            ]
+          }
+        ],
+        "functions": [
+          {
+            "name": "cleanup_old_data",
+            "isDestructive": true
+          },
+          {
+            "name": "send_notifications",
+            "isDestructive": false
+          }
+        ]
+      },
+      "slug": "8han49",
+      "createdAt": "2025-12-28T10:30:49.986Z"
+    },
+    "cpg99l": {
+      "projectLabel": "abc",
+      "sourceMode": "insforge",
+      "readinessScore": 100,
+      "summary": {
+        "high": 0,
+        "medium": 0,
+        "low": 0
+      },
+      "findings": [],
+      "slug": "cpg99l",
+      "createdAt": "2025-12-28T10:40:54.403Z"
+    },
+    "m7dk1j": {
+      "projectLabel": "dd",
+      "sourceMode": "manual",
+      "readinessScore": 0,
+      "summary": {
+        "high": 5,
+        "medium": 4,
+        "low": 0
+      },
+      "findings": [
+        {
+          "id": "1766918481453-rxsowepae",
+          "severity": "MEDIUM",
+          "category": "SCHEMA",
+          "title": "Column \"email\" in table \"users\" is nullable",
+          "evidence": "Column \"email\" in table \"users\" has nullable: true. This may cause data integrity issues.",
+          "recommendation": "Set nullable: false for column \"email\" in table \"users\" to ensure data integrity."
+        },
+        {
+          "id": "1766918481453-ldqryrihg",
+          "severity": "HIGH",
+          "category": "SCHEMA",
+          "title": "Table \"posts\" has no primary key",
+          "evidence": "Table posts has 3 columns but no primary key defined.",
+          "recommendation": "Add a primary key column (e.g., \"id\" with integer type and primaryKey: true) to table \"posts\"."
+        },
+        {
+          "id": "1766918481453-tumkx6i0y",
+          "severity": "MEDIUM",
+          "category": "SCHEMA",
+          "title": "Column \"title\" in table \"posts\" is nullable",
+          "evidence": "Column \"title\" in table \"posts\" has nullable: true. This may cause data integrity issues.",
+          "recommendation": "Set nullable: false for column \"title\" in table \"posts\" to ensure data integrity."
+        },
+        {
+          "id": "1766918481453-29th9otil",
+          "severity": "HIGH",
+          "category": "SCHEMA",
+          "title": "Column \"user_id\" in table \"posts\" lacks foreign key",
+          "evidence": "Column \"user_id\" in table \"posts\" ends with \"_id\" but has no foreignKey relationship defined.",
+          "recommendation": "Add a foreignKey relationship to column \"user_id\" pointing to the referenced table and column."
+        },
+        {
+          "id": "1766918481453-yyfkxn9nv",
+          "severity": "HIGH",
+          "category": "SCHEMA",
+          "title": "Foreign key in \"comments.post_id\" points to non-existent table",
+          "evidence": "Column \"post_id\" references table \"post\" which does not exist in the schema.",
+          "recommendation": "Either create the missing table \"post\" or fix the foreignKey reference."
+        },
+        {
+          "id": "1766918481454-b21j5r7xp",
+          "severity": "HIGH",
+          "category": "AUTH",
+          "title": "Write endpoint \"POST /users\" has no authentication",
+          "evidence": "Endpoint POST /users allows write operations without authentication (requiresAuth: false).",
+          "recommendation": "Set requiresAuth: true for endpoint POST /users to prevent unauthorized data modification."
+        },
+        {
+          "id": "1766918481454-yp3n3hrmn",
+          "severity": "HIGH",
+          "category": "AUTH",
+          "title": "Endpoint \"GET /users\" requires auth but has no allowed roles",
+          "evidence": "Endpoint GET /users has requiresAuth: true but rolesAllowed is empty. No users can access this endpoint.",
+          "recommendation": "Add appropriate roles to rolesAllowed (e.g., [\"user\", \"admin\"]) for endpoint GET /users."
+        },
+        {
+          "id": "1766918481454-ymudeos5j",
+          "severity": "MEDIUM",
+          "category": "AUTH",
+          "title": "DELETE endpoint \"/users\" allows \"user\" role",
+          "evidence": "Endpoint DELETE /users allows users with \"user\" role to delete resources. This may be overly permissive.",
+          "recommendation": "Consider restricting DELETE operations on \"/users\" to \"admin\" role only."
+        },
+        {
+          "id": "1766918481455-ed4ku5o03",
+          "severity": "MEDIUM",
+          "category": "DEPLOY",
+          "title": "Destructive function \"cleanup_old_data\" lacks admin protection",
+          "evidence": "Function \"cleanup_old_data\" has isDestructive: true but no auth rules mention \"admin\" role.",
+          "recommendation": "Add auth rules that require \"admin\" role before executing destructive function \"cleanup_old_data\"."
+        }
+      ],
+      "rawMetadata": {
+        "tables": [
+          {
+            "name": "users",
+            "columns": [
+              {
+                "name": "id",
+                "type": "integer",
+                "primaryKey": true
+              },
+              {
+                "name": "email",
+                "type": "text",
+                "nullable": true
+              },
+              {
+                "name": "name",
+                "type": "text",
+                "nullable": true
+              }
+            ]
+          },
+          {
+            "name": "posts",
+            "columns": [
+              {
+                "name": "id",
+                "type": "integer"
+              },
+              {
+                "name": "title",
+                "type": "text",
+                "nullable": true
+              },
+              {
+                "name": "user_id",
+                "type": "integer"
+              }
+            ]
+          },
+          {
+            "name": "comments",
+            "columns": [
+              {
+                "name": "id",
+                "type": "integer",
+                "primaryKey": true
+              },
+              {
+                "name": "content",
+                "type": "text"
+              },
+              {
+                "name": "post_id",
+                "type": "integer",
+                "foreignKey": {
+                  "table": "post",
+                  "column": "id"
+                }
+              }
+            ]
+          }
+        ],
+        "authRules": [
+          {
+            "endpoint": "/users",
+            "method": "POST",
+            "requiresAuth": false,
+            "rolesAllowed": []
+          },
+          {
+            "endpoint": "/users",
+            "method": "GET",
+            "requiresAuth": true,
+            "rolesAllowed": []
+          },
+          {
+            "endpoint": "/users",
+            "method": "DELETE",
+            "requiresAuth": true,
+            "rolesAllowed": [
+              "user"
+            ]
+          },
+          {
+            "endpoint": "/posts",
+            "method": "GET",
+            "requiresAuth": false,
+            "rolesAllowed": []
+          },
+          {
+            "endpoint": "/posts",
+            "method": "POST",
+            "requiresAuth": true,
+            "rolesAllowed": [
+              "user"
+            ]
+          }
+        ],
+        "functions": [
+          {
+            "name": "cleanup_old_data",
+            "isDestructive": true
+          },
+          {
+            "name": "send_notifications",
+            "isDestructive": false
+          }
+        ]
+      },
+      "slug": "m7dk1j",
+      "createdAt": "2025-12-28T10:41:21.456Z"
+    }
+  }
+}
